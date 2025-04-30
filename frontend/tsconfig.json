@@ -6,12 +6,19 @@
       "@/*": [
         "./*"
       ]
-    }
+    },
+    "baseUrl": ".",
+    "target": "ES6", 
+    "experimentalDecorators": true,  
+    "emitDecoratorMetadata": true,   
+    "moduleResolution": "node",      
+    "esModuleInterop": true          
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-  ]
+  ],
+  
 }
