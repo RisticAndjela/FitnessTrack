@@ -2,61 +2,70 @@ const { sequelize, User } = require('../db/db_test');
 const UserRepository = require('../repositories/UserRepository');
 const userRepo = new UserRepository(User);
 
-afterAll(async () => {
-  await sequelize.sync({ force: true });
-  await sequelize.close();
-});
+describe('User Model - CRUD Operations & Edge Cases', () => {
+  let createdUser;
 
-describe('User Model', () => {
-  it('should create a user successfully', async () => { 
+  beforeAll(async () => {
     const userData = {
-      username: 'testuser3',
-      password: 'pass123',
-      first_name: 'Test',
-      last_name: 'User',
+      username: 'edgeuser',
+      password: 'pass999',
+      first_name: 'Edge',
+      last_name: 'Case',
       type: 'Regular'
     };
-    const user = await userRepo.createUser(userData);
+    createdUser = await userRepo.createUser(userData);
+  });
+  
+  afterAll(async () => {
+    await sequelize.sync({ force: true });
+    await sequelize.close();
+  });
+
+  it('should retrieve all users', async () => {
+    const users = await userRepo.getAllUsers();
+    expect(users.length).toBeGreaterThanOrEqual(1);
+    expect(users.find(u => u.username === 'edgeuser')).toBeDefined();
+  });
+
+  it('should get a user by ID', async () => {
+    const fetched = await userRepo.getUserById(createdUser.user_id);
+    expect(fetched).toBeDefined();
+    expect(fetched.username).toBe('edgeuser');
+  });
+
+  it('should return null for non-existent user by ID', async () => {
+    const nonExistent = await userRepo.getUserById(999999);
+    expect(nonExistent).toBeNull();
+  });
+
+  it('should update a user successfully', async () => {
+    const updated = await userRepo.updateUser(createdUser.user_id, {
+      first_name: 'Updated',
+      last_name: 'Name'
+    });
+    expect(updated).toBeDefined();
+    expect(updated.first_name).toBe('Updated');
+  });
+
+  it('should return null when updating non-existent user', async () => {
+    const result = await userRepo.updateUser(999999, { first_name: 'Nope' });
+    expect(result).toBeNull();
+  });
+
+  it('should delete a user successfully', async () => {
+    const deleted = await userRepo.deleteUser(createdUser.user_id);
+    expect(deleted).toBe(1); 
     
-    expect(user).toBeDefined();
-    expect(user.username).toBe('testuser3');
-    expect(user.type).toBe('Regular');
+    const check = await userRepo.getUserById(createdUser.user_id);
+    expect(check).toBeNull();
+  });
+
+  it('should return 0 when deleting non-existent user', async () => {
+    const result = await userRepo.deleteUser(999999);
+    expect(result).toBe(0);
+  });
+
+  it('should throw or fail gracefully when creating user with invalid data', async () => {
+    await expect(userRepo.createUser({})).rejects.toThrow();
   });
 });
-describe('User Model - Multiple Users', () => {
-    it('should create multiple users with unique IDs', async () => {
-      const users = [
-        {
-          username: 'user1',
-          password: 'pass1',
-          first_name: 'John',
-          last_name: 'Doe',
-          type: 'Regular',
-        },
-        {
-          username: 'user2',
-          password: 'pass2',
-          first_name: 'Jane',
-          last_name: 'Smith',
-          type: 'Coach',
-        },
-        {
-          username: 'user3',
-          password: 'pass3',
-          first_name: 'Alice',
-          last_name: 'Walker',
-          type: 'Regular',
-        },
-      ];
-  
-      const createdUsers = [];
-      for (const data of users) {
-        const user = await userRepo.createUser(data);
-        createdUsers.push(user);
-      }
-  
-      expect(createdUsers).toHaveLength(3);
-      expect(new Set(createdUsers.map(u => u.user_id)).size).toBe(3);
-    });
-  });
-  
