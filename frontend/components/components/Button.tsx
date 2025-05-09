@@ -4,7 +4,8 @@ import containers from '@/components/styles/style-container';
 import buttons from '@/components/styles/style-button';
 
 export enum Theme{
-  Regular
+  Regular,
+  Link
 }
 type Props = {
   label: string;
@@ -23,18 +24,20 @@ export function Button({ label, onPress, theme }: Props) {
         <Pressable
           style={[buttons.regular_button, { backgroundColor: color.WHITE }]}
           onPress={() => onPress()}>
-          <Text style={[buttons.buttonLabel, { color: color.DARK_GRAY }]}>{label}</Text>
+          <Text style={[buttons.buttonLabel]}>{label}</Text>
         </Pressable>
       </View>
     );
   }
-
-  return (
-    <View style={containers.buttonContainer}>
-      <Pressable style={buttons.regular_button} onPress={() => alert('You pressed a button.')}>
-        <Text style={buttons.buttonLabel}>{label}</Text>
-      </Pressable>
-    </View>
-  );
+  if (theme == Theme.Link){
+    return (
+      <View style={[containers.buttonContainer,{margin:0, height:'auto'}]}>
+        <Pressable style={buttons.regular_button} onPress={() => onPress()} >
+          <Text style={[buttons.buttonLabel,{textDecorationLine: 'underline'}]}>{label}</Text>
+        </Pressable>
+      </View>
+    );
+  }
+  return;
 }
 

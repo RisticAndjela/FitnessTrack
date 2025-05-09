@@ -24,6 +24,11 @@ class UserRepository {
   async deleteUser(id) {
     return await this.user.destroy({ where: { user_id: id } });
   }
+
+  async findByUsername(username) {
+    return await this.user.findOne({ where: { username: username } });
+  }
+  
 }
 
 module.exports = UserRepository;

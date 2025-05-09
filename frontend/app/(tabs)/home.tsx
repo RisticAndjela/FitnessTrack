@@ -8,7 +8,7 @@ const apiCall = () => {
       console.log('Response:', response.data);
     })
     .catch(error => {
-      console.error('API Error:', error);
+      console.error('API Error:', error.message);
     });
 };
 

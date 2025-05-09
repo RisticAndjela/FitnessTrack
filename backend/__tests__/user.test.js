@@ -52,6 +52,24 @@ describe('User Model - CRUD Operations & Edge Cases', () => {
     expect(result).toBeNull();
   });
 
+
+
+  it('should throw or fail gracefully when creating user with invalid data', async () => {
+    await expect(userRepo.createUser({})).rejects.toThrow();
+  });
+  
+  it('should find a user by username', async () => {
+    const foundUser = await userRepo.findByUsername('edgeuser');
+    expect(foundUser.username).toBe('edgeuser');
+    
+  });
+  
+  it('should return null for non-existent username', async () => {
+    const nonExistentUser = await userRepo.findByUsername('nonexistentuser');
+    expect(nonExistentUser).toBeNull();
+  });
+  
+
   it('should delete a user successfully', async () => {
     const deleted = await userRepo.deleteUser(createdUser.user_id);
     expect(deleted).toBe(1); 
@@ -64,8 +82,5 @@ describe('User Model - CRUD Operations & Edge Cases', () => {
     const result = await userRepo.deleteUser(999999);
     expect(result).toBe(0);
   });
-
-  it('should throw or fail gracefully when creating user with invalid data', async () => {
-    await expect(userRepo.createUser({})).rejects.toThrow();
-  });
+  
 });

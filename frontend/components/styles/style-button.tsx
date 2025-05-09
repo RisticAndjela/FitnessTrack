@@ -19,8 +19,8 @@ const styles = StyleSheet.create({
         paddingRight: 8,
     },
     buttonLabel: {
-        color: color.WHITE,
         fontSize: 16,
+        color: color.DARK_GRAY,
     },
 });
 

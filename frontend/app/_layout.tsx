@@ -1,10 +1,10 @@
-import { Stack } from 'expo-router';
+import { AuthProvider } from '@/context/authContext';
+import RootLayoutNav from './nav.config';
 
-export default function RootLayout() {
+export default function App() {
   return (
-    <Stack>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="+not-found" />
-    </Stack>
+    <AuthProvider>
+      <RootLayoutNav/>
+    </AuthProvider>
   );
 }

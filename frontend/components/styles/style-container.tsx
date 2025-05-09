@@ -6,6 +6,8 @@ const styles = StyleSheet.create({
       flex: 1,
       justifyContent: "center",
       alignItems: "center",
+      width:'80%',
+      marginLeft:'10%'
     },
     centered_container_dark: {
         flex: 1,
@@ -14,13 +16,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     buttonContainer: {
-        width: 320,
-        height: 68,
+        width:'50%',
+        height: 50,
         marginHorizontal: 20,
         alignItems: 'center',
         justifyContent: 'center',
         padding: 3,
+        margin: 5
     },
+    inputContainer: {
+        marginVertical: 6,
+        backgroundColor: 'white',
+        padding: 10,
+        width: '95%' 
+    }
     
 });
 
